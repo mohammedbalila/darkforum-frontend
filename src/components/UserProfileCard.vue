@@ -46,24 +46,24 @@
 </template>
 
 <script>
-    export default {
-      props: {
-        user: {
-          required: true,
-          type: Object
-        }
-      },
-
-      computed: {
-        userThreadsCount () {
-          return this.$store.getters['users/userThreadsCount'](this.user['.key'])
-        },
-
-        userPostsCount () {
-          return this.$store.getters['users/userPostsCount'](this.user['.key'])
-        }
-      }
+export default {
+  props: {
+    user: {
+      required: true,
+      type: Object
     }
+  },
+
+  computed: {
+    userThreadsCount() {
+      return this.$store.getters['users/userThreadsCount'](this.user['.key']);
+    },
+
+    userPostsCount() {
+      return this.$store.getters['users/userPostsCount'](this.user['.key']);
+    }
+  }
+};
 </script>
 
 <style scoped>

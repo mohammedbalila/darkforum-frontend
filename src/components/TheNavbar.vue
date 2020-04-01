@@ -57,37 +57,38 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import clickOutside from '@/directives/click-outside'
-  import handleScroll from '@/directives/handle-scroll'
-  export default {
-    directives: {
-      clickOutside,
-      handleScroll
-    },
+import { mapGetters } from 'vuex';
+import clickOutside from '@/directives/click-outside';
+import handleScroll from '@/directives/handle-scroll';
 
-    data () {
-      return {
-        userDropdownOpen: false,
-        mobileNavOpen: false
-      }
-    },
+export default {
+  directives: {
+    clickOutside,
+    handleScroll
+  },
 
-    computed: {
-      ...mapGetters({
-        'user': 'auth/authUser'
-      })
-    },
+  data() {
+    return {
+      userDropdownOpen: false,
+      mobileNavOpen: false
+    };
+  },
 
-    methods: {
-      closeUserDropdown () {
-        this.userDropdownOpen = false
-      },
-      closeMobileNavbar () {
-        this.mobileNavOpen = false
-      }
+  computed: {
+    ...mapGetters({
+      user: 'auth/authUser'
+    })
+  },
+
+  methods: {
+    closeUserDropdown() {
+      this.userDropdownOpen = false;
+    },
+    closeMobileNavbar() {
+      this.mobileNavOpen = false;
     }
   }
+};
 </script>
 
 <style scoped>

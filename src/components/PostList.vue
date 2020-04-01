@@ -9,19 +9,20 @@
 </template>
 
 <script>
-    import PostListItem from './PostListItem'
-    export default {
-      components: {
-        PostListItem
-      },
+import PostListItem from './PostListItem';
 
-      props: {
-        posts: {
-          required: true,
-          type: Array
-        }
-      }
+export default {
+  components: {
+    PostListItem
+  },
+
+  props: {
+    posts: {
+      required: true,
+      type: Array
     }
+  }
+};
 </script>
 
 <style scoped>

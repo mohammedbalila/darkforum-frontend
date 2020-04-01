@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import TheNavbar from "@/components/TheNavbar";
-import AppSpinner from "@/components/AppSpinner";
-import NProgress from "nprogress";
+import TheNavbar from '@/components/TheNavbar';
+import AppSpinner from '@/components/AppSpinner';
+import NProgress from 'nprogress';
 
 export default {
   components: {

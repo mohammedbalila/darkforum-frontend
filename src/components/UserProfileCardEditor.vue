@@ -76,73 +76,74 @@
 </template>
 
 <script>
-    import { required, email } from 'vuelidate/lib/validators'
-    import { uniqueUsername, uniqueEmail } from '@/utils/validators'
-    export default {
-      props: {
-        user: {
-          required: true,
-          type: Object
-        }
+import { required, email } from 'vuelidate/lib/validators';
+import { uniqueUsername, uniqueEmail } from '@/utils/validators';
+
+export default {
+  props: {
+    user: {
+      required: true,
+      type: Object
+    }
+  },
+
+  data() {
+    return {
+      activeUser: { ...this.user }
+    };
+  },
+
+  computed: {
+    userThreadsCount() {
+      return this.$store.getters['users/userThreadsCount'](this.user['.key']);
+    },
+
+    userPostsCount() {
+      return this.$store.getters['users/userPostsCount'](this.user['.key']);
+    }
+  },
+
+  validations: {
+    activeUser: {
+      name: {
+        required
       },
-
-      data () {
-        return {
-          activeUser: {...this.user}
-        }
-      },
-
-      computed: {
-        userThreadsCount () {
-          return this.$store.getters['users/userThreadsCount'](this.user['.key'])
-        },
-
-        userPostsCount () {
-          return this.$store.getters['users/userPostsCount'](this.user['.key'])
-        }
-      },
-
-      validations: {
-        activeUser: {
-          name: {
-            required
-          },
-          username: {
-            required,
-            unique (value) {
-              if (value.toLowerCase() === this.user.usernameLower) {
-                return true
-              }
-              return uniqueUsername(value)
-            }
-          },
-          email: {
-            required,
-            email,
-            unique (value) {
-              if (value.toLowerCase() === this.user.email) {
-                return true
-              }
-              return uniqueEmail(value)
-            }
+      username: {
+        required,
+        unique(value) {
+          if (value.toLowerCase() === this.user.usernameLower) {
+            return true;
           }
+          return uniqueUsername(value);
         }
       },
-
-      methods: {
-        save () {
-          this.$v.activeUser.$touch()
-          if (!this.$v.activeUser.$invalid) {
-            this.$store.dispatch('users/updateUser', {...this.activeUser})
-            this.$router.push({name: 'Profile'})
+      email: {
+        required,
+        email,
+        unique(value) {
+          if (value.toLowerCase() === this.user.email) {
+            return true;
           }
-        },
-
-        cancel () {
-          this.$router.push({name: 'Profile'})
+          return uniqueEmail(value);
         }
       }
     }
+  },
+
+  methods: {
+    save() {
+      this.$v.activeUser.$touch();
+      if (!this.$v.activeUser.$invalid) {
+        this.$store.dispatch('users/updateUser', { ...this.activeUser });
+        this.$router.push({ name: 'Profile' });
+      }
+    },
+
+    cancel() {
+      this.$router.push({ name: 'Profile' });
+    }
+  }
+};
 </script>
 
 <style scoped>
