@@ -1,10 +1,12 @@
 <template>
   <div v-if="asyncDataStatus_ready" class="forum-wrapper">
-    <div class="col-full push-top">
+    <div class="col-full push-top" v-if="forum">
       <div class="forum-header">
         <div class="forum-details">
           <h1>{{forum.name}}</h1>
           <p class="text-lead">{{forum.description}}</p>
+          <AppDate :timestamp="forum.publishedAt" />.
+          <p>by {{forum.author.username}}.</p>
         </div>
         <router-link
           :to="{name: 'ThreadCreate', params: {forumId: this.forum.id}}"
@@ -14,13 +16,14 @@
     </div>
 
     <div class="col-full push-top">
-      <ThreadList :threads="threads" />
+      <ThreadList :threads="forum.threads" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import moment from 'moment';
 import ThreadList from '@/components/ThreadList';
 import asyncDataStatus from '@/mixins/asyncDataStatus';
 
@@ -32,7 +35,7 @@ export default {
   mixins: [asyncDataStatus],
 
   props: {
-    id: {
+    slug: {
       required: true,
       type: String
     }
@@ -40,22 +43,22 @@ export default {
 
   computed: {
     forum() {
-      return this.$store.state.forums.forums[this.id];
+      return this.$store.state.forums.forum;
     },
 
-    threads() {
-      return [];
+    publishedAt() {
+      return moment(this.forum.publishedAt).fromNow();
     }
   },
 
   methods: {
-    ...mapActions('forums', ['fetchForum']),
+    ...mapActions('forums', ['fetchForumBySlug']),
     ...mapActions('threads', ['fetchThreads']),
     ...mapActions('users', ['fetchUser'])
   },
 
   created() {
-    this.fetchForum(this.id).then(() => {
+    this.fetchForumBySlug(this.slug).then(() => {
       this.asyncDataStatus_fetched();
     });
   }

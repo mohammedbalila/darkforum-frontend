@@ -18,6 +18,16 @@ export default {
       }
     },
 
+    async fetchForumBySlug({ commit }, slug) {
+      try {
+        const resp = await axios.get(`/forums/slug/${slug}`);
+        commit('setForum', resp.data.forum);
+        return resp.data.forum;
+      } catch (error) {
+        throw Error(error);
+      }
+    },
+
     async fetchForums({ commit }) {
       try {
         const resp = await axios.get('/forums');

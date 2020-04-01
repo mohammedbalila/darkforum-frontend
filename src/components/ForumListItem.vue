@@ -4,15 +4,9 @@
       <router-link
         class="text-xlarge"
         :to="{name: 'Forum', params: {
-        id: forum._id
+        slug: forum.slug
         }}"
       >{{forum.name}}</router-link>
-      <p>{{forum.description}}</p>
-    </div>
-
-    <div class="threads-count">
-      <p class="count">{{threadsCount}}</p>
-      {{threadsCount === 1 ? 'thread' : 'threads'}}
     </div>
 
     <div class="last-thread">
@@ -22,6 +16,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: {
     forum: {
@@ -30,10 +26,26 @@ export default {
     }
   },
 
+  data() {
+    return {
+      localForum: {}
+    };
+  },
+
   computed: {
     threadsCount() {
-      return 10;
+      return this.forum.threadsCount;
     }
+  },
+
+  methods: {
+    ...mapActions('forums', ['fetchForum'])
+  },
+
+  created() {
+    this.fetchForum(this.forum._id).then(forum => {
+      this.localForum = forum;
+    });
   }
 };
 </script>

@@ -28,7 +28,7 @@ const router = new Router({
       props: true
     },
     {
-      path: '/forum/:id',
+      path: '/forum/:slug',
       name: 'Forum',
       component: Forum,
       props: true
@@ -41,7 +41,7 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/thread/:id',
+      path: '/thread/:slug',
       name: 'ThreadShow',
       component: ThreadShow,
       props: true

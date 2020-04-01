@@ -1,8 +1,11 @@
+import axios from 'axios';
+
 export default {
   namespaced: true,
 
   state: {
-    items: []
+    threads: [],
+    thread: {}
   },
 
   getters: {
@@ -14,12 +17,28 @@ export default {
 
     updateThread() {},
 
+    async fetchThreadBySlug({ commit }, slug) {
+      try {
+        const resp = await axios.get(`/threads/slug/${slug}`);
+        commit('setThread', resp.data.thread);
+        return resp.data.thread;
+      } catch (error) {
+        throw Error(error);
+      }
+    },
+
     fetchThread() {},
 
     fetchThreads() {}
   },
   mutations: {
-    setThread() {},
+    setThreads(state, threads) {
+      state.threads = threads;
+    },
+
+    setThread(state, thread) {
+      state.thread = thread;
+    },
 
     appendPostToThread() {},
 
