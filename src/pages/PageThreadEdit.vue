@@ -1,94 +1,97 @@
 <template>
   <div v-if="asyncDataStatus_ready" class="col-full push-top">
+    <h1>
+      Editing <i>{{ thread.title }}</i>
+    </h1>
 
-    <h1>Editing <i>{{thread.title}}</i></h1>
-
-    <ThreadEditor
-      ref="editor"
-      :title="thread.title"
-      :text="text"
-      @save="save"
-      @cancel="cancel"
-    />
+    <ThreadEditor ref="editor" :title="thread.title" :text="text" @save="save" @cancel="cancel" />
   </div>
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
-  import ThreadEditor from '@/components/ThreadEditor'
-  import asyncDataStatus from '@/mixins/asyncDataStatus'
+import { mapActions } from 'vuex';
+import ThreadEditor from '@/components/ThreadEditor';
+import asyncDataStatus from '@/mixins/asyncDataStatus';
 
-  export default {
-    components: {
-      ThreadEditor
+export default {
+  components: {
+    ThreadEditor
+  },
+
+  mixins: [asyncDataStatus],
+
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+
+  computed: {
+    thread() {
+      return this.$store.state.threads.items[this.id];
     },
 
-    mixins: [asyncDataStatus],
-
-    props: {
-      id: {
-        type: String,
-        required: true
-      }
+    text() {
+      const post = this.$store.state.posts.items[this.thread.firstPostId];
+      return post ? post.text : null;
     },
 
-    computed: {
-      thread () {
-        return this.$store.state.threads.items[this.id]
-      },
+    hasUnsavedChanges() {
+      // this.saved is not required in this implementation because
+      // `this.thread.title` and `this.text` are reactive
+      // Thus `hasUnsavedChanges` will automatically become false when the thread is updated
+      return (
+        // eslint-disable-next-line operator-linebreak
+        this.$refs.editor.form.title !== this.thread.title ||
+        this.$refs.editor.form.text !== this.text
+      );
+    }
+  },
 
-      text () {
-        const post = this.$store.state.posts.items[this.thread.firstPostId]
-        return post ? post.text : null
-      },
+  methods: {
+    ...mapActions('threads', ['updateThread', 'fetchThread']),
+    ...mapActions('posts', ['fetchPost']),
 
-      hasUnsavedChanges () {
-        // this.saved is not required in this implementation because `this.thread.title` and `this.text` are reactive
-        // Thus `hasUnsavedChanges` will automatically become false when the thread is updated
-        return this.$refs.editor.form.title !== this.thread.title || this.$refs.editor.form.text !== this.text
-      }
+    save({ title, text }) {
+      this.updateThread({
+        id: this.id,
+        title,
+        text
+      }).then(() => {
+        this.$router.push({ name: 'ThreadShow', params: { id: this.id } });
+      });
     },
 
-    methods: {
-      ...mapActions('threads', ['updateThread', 'fetchThread']),
-      ...mapActions('posts', ['fetchPost']),
+    cancel() {
+      this.$router.push({ name: 'ThreadShow', params: { id: this.id } });
+    }
+  },
 
-      save ({title, text}) {
-        this.updateThread({
-          id: this.id,
-          title,
-          text
-        }).then(thread => {
-          this.$router.push({name: 'ThreadShow', params: {id: this.id}})
-        })
-      },
+  created() {
+    this.fetchThread({ id: this.id })
+      .then(thread => this.fetchPost({ id: thread.firstPostId }))
+      .then(() => {
+        this.asyncDataStatus_fetched();
+      });
+  },
 
-      cancel () {
-        this.$router.push({name: 'ThreadShow', params: {id: this.id}})
-      }
-    },
-
-    created () {
-      this.fetchThread({id: this.id})
-        .then(thread => this.fetchPost({id: thread.firstPostId}))
-        .then(() => { this.asyncDataStatus_fetched() })
-    },
-
-    beforeRouteLeave (to, from, next) {
-      if (this.hasUnsavedChanges) {
-        const confirmed = window.confirm('Are you sure you want to leave? Any unsaved changes will be lost!')
-        if (confirmed) {
-          next()
-        } else {
-          next(false)
-        }
+  beforeRouteLeave(to, from, next) {
+    if (this.hasUnsavedChanges) {
+      // eslint-disable-next-line no-alert
+      const confirmed = window.confirm(
+        'Are you sure you want to leave? Any unsaved changes will be lost!'
+      );
+      if (confirmed) {
+        next();
       } else {
-        next()
+        next(false);
       }
+    } else {
+      next();
     }
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
