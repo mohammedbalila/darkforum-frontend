@@ -4,7 +4,7 @@
       <a href="#" class="user-name">{{user.name}}</a>
 
       <a href="#">
-        <img class="avatar-large" :src="user.avatar" alt="">
+        <img class="avatar-large" :src="user.avatar" alt />
       </a>
 
       <p class="desktop-only text-small">{{userThreadsCount}} threads</p>
@@ -13,24 +13,25 @@
 
     <div class="post-content">
       <template v-if="!editing">
-        <div>
-          {{post.text}}
-        </div>
-        <a @click.prevent="editing = true" href="#" style="margin-left: auto;" class="link-unstyled" title="Make a change"><i class="fa fa-pencil"></i></a>
+        <div>{{post.text}}</div>
+        <a
+          @click.prevent="editing = true"
+          href="#"
+          style="margin-left: auto;"
+          class="link-unstyled"
+          title="Make a change"
+        >
+          <i class="fa fa-pencil"></i>
+        </a>
       </template>
       <div v-else>
-        <PostEditor
-          :post="post"
-          @save="editing = false"
-          @cancel="editing = false"
-        />
+        <PostEditor :post="post" @save="editing = false" @cancel="editing = false" />
       </div>
-
     </div>
 
     <div class="post-date text-faded">
       <div v-if="post.edited" class="edition-info">edited</div>
-      <AppDate :timestamp="post.publishedAt"/>
+      <AppDate :timestamp="post.publishedAt" />
     </div>
   </div>
 </template>
@@ -73,5 +74,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

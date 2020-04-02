@@ -5,16 +5,31 @@
         <h1 class="text-center">Register</h1>
 
         <div class="form-group">
-          <label for="name">Full Name</label>
+          <label for="firstName">First Name</label>
           <input
-            v-model="form.name"
-            @blur="$v.form.name.$touch()"
-            id="name"
+            v-model="form.firstName"
+            @blur="$v.form.firstName.$touch()"
+            id="firstName"
             type="text"
             class="form-input"
           />
-          <template v-if="$v.form.name.$error">
-            <span v-if="!$v.form.name.required" class="form-error">This field is required</span>
+          <template v-if="$v.form.firstName.$error">
+            <span v-if="!$v.form.firstName.required" class="form-error">
+              This field is required
+            </span>
+          </template>
+          <label for="lastName">Last Name</label>
+          <input
+            v-model="form.lastName"
+            @blur="$v.form.lastName.$touch()"
+            id="lastName"
+            type="text"
+            class="form-input"
+          />
+          <template v-if="$v.form.lastName.$error">
+            <span v-if="!$v.form.lastName.required" class="form-error">
+              This field is required
+            </span>
           </template>
         </div>
 
@@ -29,9 +44,6 @@
           />
           <template v-if="$v.form.username.$error">
             <span v-if="!$v.form.username.required" class="form-error">This field is required</span>
-            <span v-if="!$v.form.username.unique" class="form-error"
-              >Sorry! This username is taken</span
-            >
           </template>
         </div>
 
@@ -47,9 +59,6 @@
             <span v-if="!$v.form.email.required" class="form-error">This field is required</span>
             <span v-else-if="!$v.form.email.email" class="form-error"
               >This in not a valid email address</span
-            >
-            <span v-else-if="!$v.form.email.unique" class="form-error"
-              >Sorry! This email is taken</span
             >
           </template>
         </div>
@@ -71,36 +80,15 @@
           </template>
         </div>
 
-        <div class="form-group">
-          <label for="avatar">Avatar</label>
-          <input
-            v-model.lazy="form.avatar"
-            @blur="$v.form.avatar.$touch()"
-            id="avatar"
-            type="text"
-            class="form-input"
-          />
-          <template v-if="$v.form.avatar.$error">
-            <span v-if="!$v.form.avatar.url" class="form-error">The supplied URL is invalid</span>
-            <span v-else-if="!$v.form.avatar.supportedImageFile" class="form-error"
-              >This file type is not supported by our system. Supported file types: .jpg, .png,
-              .gif, .jpeg, .svg</span
-            >
-            <span v-else-if="!$v.form.avatar.responseOk" class="form-error"
-              >The supplied image cannot be found</span
-            >
-          </template>
-        </div>
-
         <div class="form-actions">
           <button type="submit" class="btn-blue btn-block">Register</button>
         </div>
+        <div class="text-center push-top">
+          <button @click="registerWithGoogle" class="btn-red btn-xsmall">
+            Sign up with Google <i class="fa fa-google-plus"></i>
+          </button>
+        </div>
       </form>
-      <div class="text-center push-top">
-        <button @click="registerWithGoogle" class="btn-red btn-xsmall">
-          <i class="fa fa-google fa-btn"></i>Sign up with Google
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -108,43 +96,39 @@
 <script>
 /* eslint-disable */
 import { required, email, minLength, url } from 'vuelidate/lib/validators';
-import { uniqueEmail, uniqueUsername, responseOk, supportedImageFile } from '@/utils/validators';
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
       form: {
-        name: null,
+        firstName: null,
+        lastName: null,
         username: null,
         email: null,
-        password: null,
-        avatar: null
+        password: null
       }
     };
   },
 
   validations: {
     form: {
-      name: {
+      firstName: {
+        required
+      },
+      lastName: {
         required
       },
       username: {
-        required,
-        unique: uniqueUsername
+        required
       },
       email: {
         required,
-        email,
-        unique: uniqueEmail
+        email
       },
       password: {
         required,
         minLength: minLength(6)
-      },
-      avatar: {
-        url,
-        supportedImageFile,
-        responseOk
       }
     }
   },
@@ -156,8 +140,13 @@ export default {
         return;
       }
       this.$store
-        .dispatch('auth/registerUserWithEmailAndPassword', this.form)
-        .then(() => this.successRedirect());
+        .dispatch('auth/register', this.form)
+        .then(resp => {
+          this.successRedirect();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     registerWithGoogle() {
@@ -170,7 +159,14 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters('auth', ['isLoggedIn'])
+  },
+
   created() {
+    if (this.isLoggedIn) {
+      return this.$router.push({ name: 'Home' });
+    }
     this.$emit('ready');
   }
 };

@@ -1,8 +1,12 @@
+import axios from 'axios';
+
 export default {
   namespaced: true,
 
   state: {
-    items: []
+    user: {},
+    threads: [],
+    posts: []
   },
 
   getters: {
@@ -14,17 +18,49 @@ export default {
   },
 
   actions: {
-    createUser() {},
+    async getPosts({ commit }, id) {
+      try {
+        const resp = await axios.get(`/posts/user/${id}`);
+        commit('setPosts', resp.data.posts);
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
 
+    async getThreads({ commit }, id) {
+      try {
+        const resp = await axios.get(`/threads/user/${id}`);
+        commit('setThreads', resp.data.threads);
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
     updateUser() {},
 
-    fetchUser() {},
+    async fetchUser({ commit }, username) {
+      try {
+        const resp = await axios.get(`/users/username/${username}`);
+        commit('setUser', resp.data.user);
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
 
     fetchUsers() {}
   },
 
   mutations: {
-    setUser() {},
+    setUser(state, user) {
+      state.user = user;
+    },
+
+    setPosts(state, posts) {
+      state.posts = posts;
+    },
+
+    setThreads(state, threads) {
+      state.threads = threads;
+    },
 
     appendPostToUser() {},
     appendThreadToUser() {}

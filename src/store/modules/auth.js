@@ -5,7 +5,8 @@ import axios from 'axios';
 // ===
 
 function getSavedState(key) {
-  return JSON.parse(window.localStorage.getItem(key));
+  const state = JSON.parse(window.localStorage.getItem(key));
+  return state || {};
 }
 
 function saveState(key, state) {
@@ -15,7 +16,9 @@ function setDefaultAuthHeaders(state) {
   const dev = process.env.NODE_ENV === 'development';
   const url = dev ? 'http://localhost:8000/api' : 'https://darkforum.herokuapp.com/api';
   axios.defaults.baseURL = url;
-  axios.defaults.headers.common.Authorization = state.currentUser ? state.currentUser.token : '';
+  axios.defaults.headers.common.Authorization = state.currentUser.user
+    ? state.currentUser.token
+    : '';
 }
 
 export default {
@@ -26,17 +29,46 @@ export default {
   },
 
   getters: {
-    authUser() {}
+    isLoggedIn(state) {
+      return !!state.currentUser.user;
+    },
+
+    authUser(state) {
+      return state.currentUser.user || null;
+    }
   },
 
   actions: {
     initAuthentication({ state }) {
       setDefaultAuthHeaders(state);
+      return state.currentUser.user;
     },
 
-    registerUserWithEmailAndPassword() {},
+    async register({ commit }, user) {
+      try {
+        const resp = await axios.post('/users/signup/', user);
+        if (resp.data.token) {
+          commit('setCurrentUser', resp.data);
+          return resp.data;
+        }
+        return resp.data;
+      } catch (error) {
+        throw new Error(error.response);
+      }
+    },
 
-    signInWithEmailAndPassword() {},
+    async signIn({ commit }, user) {
+      try {
+        const resp = await axios.post('/users/login/', user);
+        if (resp.data.token) {
+          commit('setCurrentUser', resp.data);
+          return resp.data;
+        }
+        return resp.data;
+      } catch (error) {
+        throw new Error(error.response);
+      }
+    },
 
     signOut() {},
 

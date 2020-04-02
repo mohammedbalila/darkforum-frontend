@@ -48,8 +48,9 @@ export default {
 </script>
 
 <style>
-@import "assets/css/style.css";
-@import "~nprogress/nprogress.css";
+@import 'assets/css/style.css';
+@import '../node_modules/materialize-css/dist/css/materialize.min.css';
+@import '~nprogress/nprogress.css';
 
 #nprogress .bar {
   background: #57ad8d;

@@ -54,14 +54,13 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/me',
+      path: '/profile/:username',
       name: 'Profile',
       component: Profile,
-      props: true,
-      meta: { requiresAuth: true }
+      props: true
     },
     {
-      path: '/me/edit',
+      path: '/profile/:username/edit',
       name: 'ProfileEdit',
       component: Profile,
       props: { edit: true },
@@ -98,7 +97,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   console.log(`🚦 navigating to ${to.name} from ${from.name}`);
-
   store.dispatch('auth/initAuthentication').then(user => {
     if (to.matched.some(route => route.meta.requiresAuth)) {
       // protected route
