@@ -1,20 +1,22 @@
 <template>
-  <div v-if="post && user" class="post">
+  <div v-if="post" class="post">
     <div class="user-info">
-      <a href="#" class="user-name">{{user.name}}</a>
+      <a href="#" class="user-name">{{post.author.username}}</a>
 
       <a href="#">
-        <img class="avatar-large" :src="user.avatar" alt />
+        <img
+          class="avatar-large"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfouyqq8NpiwUBExXDn0iR1XSl-_i3XYiTqvJ-PkcFxxgRnnZv&usqp=CAU"
+          alt
+        />
       </a>
-
-      <p class="desktop-only text-small">{{userThreadsCount}} threads</p>
-      <p class="desktop-only text-small">{{userPostsCount}} posts</p>
     </div>
 
     <div class="post-content">
       <template v-if="!editing">
         <div>{{post.text}}</div>
         <a
+          v-if="authUser && authUser._id === post.author._id"
           @click.prevent="editing = true"
           href="#"
           style="margin-left: auto;"
@@ -25,7 +27,12 @@
         </a>
       </template>
       <div v-else>
-        <PostEditor :post="post" @save="editing = false" @cancel="editing = false" />
+        <PostEditor
+          :post="post"
+          :threadId="threadId"
+          @save="editing = false"
+          @cancel="editing = false"
+        />
       </div>
     </div>
 
@@ -44,6 +51,10 @@ export default {
     post: {
       required: true,
       type: Object
+    },
+    threadId: {
+      required: true,
+      type: String
     }
   },
 
@@ -58,16 +69,8 @@ export default {
   },
 
   computed: {
-    user() {
-      return this.$store.state.users.items[this.post.userId];
-    },
-
-    userPostsCount() {
-      return this.$store.getters['users/userPostsCount'](this.post.userId);
-    },
-
-    userThreadsCount() {
-      return this.$store.getters['users/userThreadsCount'](this.post.userId);
+    authUser() {
+      return this.$store.state.auth.currentUser.user;
     }
   }
 };

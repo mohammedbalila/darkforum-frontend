@@ -17,8 +17,8 @@
         class="hide-mobile text-faded text-small"
       >{{repliesCount}} replies by {{contributorsCount}} contributors</span>
     </p>
-    <PostList :posts="thread.posts" />
-    <PostEditor v-if="authUser" :threadId="id" />
+    <PostList v-if="posts" :posts="posts" :threadId="thread._id" />
+    <PostEditor v-if="authUser" :threadId="thread._id" :threadSlug="thread.slug" />
     <div v-else class="text-center" style="margin-bottom: 50px;">
       <router-link
         :to="{name: 'SignIn', query: {
@@ -63,7 +63,11 @@ export default {
     }),
 
     ...mapState('auth', {
-      authUser: state => state.currentUser
+      authUser: state => state.currentUser.user
+    }),
+
+    ...mapState('posts', {
+      posts: state => state.posts
     }),
 
     repliesCount() {
@@ -76,12 +80,14 @@ export default {
   },
 
   methods: {
-    ...mapActions('threads', ['fetchThreadBySlug'])
+    ...mapActions('threads', ['fetchThreadBySlug']),
+    ...mapActions('posts', ['fetchPosts'])
   },
 
   created() {
     // fetch thread
-    this.fetchThreadBySlug(this.slug).then(() => {
+    this.fetchThreadBySlug(this.slug).then(thread => {
+      this.fetchPosts(thread._id);
       this.asyncDataStatus_fetched();
     });
   }

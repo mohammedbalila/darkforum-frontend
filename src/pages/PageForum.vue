@@ -9,7 +9,11 @@
           <p>by {{forum.author.username}}.</p>
         </div>
         <router-link
-          :to="{name: 'ThreadCreate', params: {forumId: this.forum.id}}"
+          :to="{name: 'ThreadCreate', params: {
+            forumSlug: this.forum.slug,
+            forumName: this.forum.name,
+            forumId: this.forum._id,
+            }}"
           class="btn-green btn-small"
         >Start a thread</router-link>
       </div>

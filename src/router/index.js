@@ -19,64 +19,64 @@ const router = new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
     },
     {
       path: '/category/:slug',
       name: 'Category',
       component: Category,
-      props: true
+      props: true,
     },
     {
       path: '/forum/:slug',
       name: 'Forum',
       component: Forum,
-      props: true
+      props: true,
     },
     {
-      path: '/thread/create/:forumId',
+      path: '/thread/create/:forumSlug',
       name: 'ThreadCreate',
       component: ThreadCreate,
       props: true,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/thread/:slug',
       name: 'ThreadShow',
       component: ThreadShow,
-      props: true
+      props: true,
     },
     {
       path: '/thread/:id/edit',
       name: 'ThreadEdit',
       component: ThreadEdit,
       props: true,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/profile/:username',
       name: 'Profile',
       component: Profile,
-      props: true
+      props: true,
     },
     {
       path: '/profile/:username/edit',
       name: 'ProfileEdit',
       component: Profile,
       props: { edit: true },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/register',
       name: 'Register',
       component: Register,
-      meta: { requiresGuest: true }
+      meta: { requiresGuest: true },
     },
     {
       path: '/signin',
       name: 'SignIn',
       component: SignIn,
-      meta: { requiresGuest: true }
+      meta: { requiresGuest: true },
     },
     {
       path: '/logout',
@@ -84,28 +84,28 @@ const router = new Router({
       meta: { requiresAuth: true },
       beforeEnter(to, from, next) {
         store.dispatch('signOut').then(() => next({ name: 'Home' }));
-      }
+      },
     },
     {
       path: '*',
       name: 'NotFound',
-      component: NotFound
-    }
+      component: NotFound,
+    },
   ],
-  mode: 'history'
+  mode: 'history',
 });
 
 router.beforeEach((to, from, next) => {
   console.log(`🚦 navigating to ${to.name} from ${from.name}`);
-  store.dispatch('auth/initAuthentication').then(user => {
-    if (to.matched.some(route => route.meta.requiresAuth)) {
+  store.dispatch('auth/initAuthentication').then((user) => {
+    if (to.matched.some((route) => route.meta.requiresAuth)) {
       // protected route
       if (user) {
         next();
       } else {
         next({ name: 'SignIn', query: { redirectTo: to.path } });
       }
-    } else if (to.matched.some(route => route.meta.requiresGuest)) {
+    } else if (to.matched.some((route) => route.meta.requiresGuest)) {
       // protected route
       if (!user) {
         next();

@@ -1,10 +1,6 @@
 <template>
   <div class="post-list">
-    <PostListItem
-      v-for="post in posts"
-      :post="post"
-      :key="post['.key']"
-    />
+    <PostListItem v-for="post in posts" :post="post" :threadId="threadId" :key="post._id" />
   </div>
 </template>
 
@@ -20,11 +16,15 @@ export default {
     posts: {
       required: true,
       type: Array
+    },
+
+    threadId: {
+      type: String,
+      required: true
     }
   }
 };
 </script>
 
 <style scoped>
-
 </style>

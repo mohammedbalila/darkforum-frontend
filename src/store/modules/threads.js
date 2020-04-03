@@ -5,15 +5,22 @@ export default {
 
   state: {
     threads: [],
-    thread: {}
+    thread: {},
   },
 
   getters: {
-    threadRepliesCount() {}
+    threadRepliesCount() {},
   },
 
   actions: {
-    createThread() {},
+    async createThread(_, thread) {
+      try {
+        const resp = await axios.post('/threads/', thread);
+        return resp.data.thread;
+      } catch (error) {
+        throw Error(error);
+      }
+    },
 
     updateThread() {},
 
@@ -29,7 +36,7 @@ export default {
 
     fetchThread() {},
 
-    fetchThreads() {}
+    fetchThreads() {},
   },
   mutations: {
     setThreads(state, threads) {
@@ -42,6 +49,6 @@ export default {
 
     appendPostToThread() {},
 
-    appendContributorToThread() {}
-  }
+    appendContributorToThread() {},
+  },
 };

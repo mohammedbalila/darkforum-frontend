@@ -34,8 +34,7 @@
         <span v-if="!$v.form.text.required" class="form-error">Thread must have some content</span>
         <span v-if="!$v.form.text.minLength" class="form-error">
           The text of the thread must be
-          least 40 characters long. Type at least
-          {{40 - form.text.length}} more
+          least 15 characters long.
         </span>
       </template>
     </div>
@@ -75,11 +74,11 @@ export default {
     form: {
       title: {
         required,
-        minLength: minLength(10)
+        minLength: minLength(3)
       },
       text: {
         required,
-        minLength: minLength(40)
+        minLength: minLength(15)
       }
     }
   },

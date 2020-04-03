@@ -17,7 +17,7 @@ function setDefaultAuthHeaders(state) {
   const url = dev ? 'http://localhost:8000/api' : 'https://darkforum.herokuapp.com/api';
   axios.defaults.baseURL = url;
   axios.defaults.headers.common.Authorization = state.currentUser.user
-    ? state.currentUser.token
+    ? `Bearer ${state.currentUser.token}`
     : '';
 }
 
@@ -25,7 +25,7 @@ export default {
   namespaced: true,
 
   state: {
-    currentUser: getSavedState('auth.currentUser')
+    currentUser: getSavedState('auth.currentUser'),
   },
 
   getters: {
@@ -35,7 +35,7 @@ export default {
 
     authUser(state) {
       return state.currentUser.user || null;
-    }
+    },
   },
 
   actions: {
@@ -72,7 +72,7 @@ export default {
 
     signOut() {},
 
-    fetchAuthUser() {}
+    fetchAuthUser() {},
   },
 
   mutations: {
@@ -84,6 +84,6 @@ export default {
 
     setUnsubscribeAuthObserver(state, unsubscribe) {
       state.unsubscribeAuthObserver = unsubscribe;
-    }
-  }
+    },
+  },
 };

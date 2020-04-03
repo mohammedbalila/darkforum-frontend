@@ -1,13 +1,11 @@
 <template>
-  <div v-if="asyncDataStatus_ready" class="col-full push-top">
+  <div class="col-full push-top">
+    <h1>
+      Create new thread in
+      <i>{{forumName}}</i>
+    </h1>
 
-    <h1>Create new thread in <i>{{forum.name}}</i></h1>
-
-    <ThreadEditor
-      ref="editor"
-      @save="save"
-      @cancel="cancel"
-    />
+    <ThreadEditor ref="editor" @save="save" @cancel="cancel" />
   </div>
 </template>
 
@@ -24,9 +22,19 @@ export default {
   mixins: [asyncDataStatus],
 
   props: {
-    forumId: {
+    forumSlug: {
       type: String,
       required: true
+    },
+
+    forumId: {
+      type: String,
+      default: null
+    },
+
+    forumName: {
+      type: String,
+      default: null
     }
   },
 
@@ -37,8 +45,8 @@ export default {
   },
 
   computed: {
-    forum() {
-      return this.$store.state.forums.items[this.forumId];
+    user() {
+      return this.$store.state.auth.currentUser.user;
     },
 
     hasUnsavedChanges() {
@@ -48,16 +56,15 @@ export default {
 
   methods: {
     ...mapActions('threads', ['createThread']),
-    ...mapActions('forums', ['fetchForum']),
 
     save({ title, text }) {
       this.createThread({
-        forumId: this.forum['.key'],
+        forum: this.forumId,
         title,
         text
       }).then(thread => {
         this.saved = true;
-        this.$router.push({ name: 'ThreadShow', params: { id: thread['.key'] } });
+        this.$router.push({ name: 'ThreadShow', params: { slug: thread.slug } });
       });
     },
 
@@ -67,25 +74,27 @@ export default {
   },
 
   created() {
-    this.fetchForum({ id: this.forumId })
-      .then(() => { this.asyncDataStatus_fetched(); });
-  },
-
-  beforeRouteLeave(to, from, next) {
-    if (this.hasUnsavedChanges) {
-      const confirmed = window.confirm('Are you sure you want to leave? Unsaved changes will be lost.');
-      if (confirmed) {
-        next();
-      } else {
-        next(false);
-      }
-    } else {
-      next();
+    if (!this.forumId) {
+      this.$router.push({ to: 'Forum', slug: this.forumSlug });
     }
+    this.$emit('ready');
   }
+
+  // beforeRouteLeave(to, from, next) {
+  //   if (this.hasUnsavedChanges) {
+  //     // eslint-disable-next-line no-alert
+  //     const confirmed = window.confirm('Are you sure you have Unsaved changes.');
+  //     if (confirmed) {
+  //       next();
+  //     } else {
+  //       next(false);
+  //     }
+  //   } else {
+  //     next();
+  //   }
+  // }
 };
 </script>
 
 <style scoped>
-
 </style>
