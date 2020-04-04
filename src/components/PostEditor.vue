@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="save">
     <div class="form-group">
-      <textarea name="text" cols="30" rows="10" class="form-input" v-model="text"></textarea>
+      <input name="text" class="form-input" v-model="text" />
     </div>
     <div class="form-actions">
       <button v-if="isUpdate" @click.prevent="cancel" class="btn btn-ghost">Cancel</button>
@@ -51,6 +51,7 @@ export default {
       this.createPost(post).then(() => {
         this.$emit('save');
         this.$store.dispatch('posts/fetchPosts', this.threadId);
+        this.text = '';
       });
     },
 
@@ -71,7 +72,7 @@ export default {
         id: this.post._id,
         text: this.text
       };
-      this.$emit('save');
+      this.$emit('save', payload.text);
       return this.updatePost(payload);
     }
   }

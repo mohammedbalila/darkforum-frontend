@@ -1,6 +1,6 @@
 <template>
   <div v-if="asyncDataStatus_ready" class="col-full push-top">
-    <h1>Welcome to the Forum</h1>
+    <h1 class="text-white">Welcome to the Dark Forum</h1>
     <CategoryList :categories="categories" />
   </div>
 </template>

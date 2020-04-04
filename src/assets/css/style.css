@@ -1,7 +1,11 @@
 @charset "UTF-8";
 
+.text-white {
+  color: white;
+}
+
 body {
-  background-color: #f6f8ff;
+  background-color: #4a4b4d;
   min-height: 100vh;
 }
 
@@ -47,7 +51,7 @@ figcaption {
 }
 
 .list-title {
-  background-color: #263959;
+  background-color: #131414;
   border-bottom-left-radius: 20px;
   color: #f5f8fe;
   font-weight: 100;
@@ -482,7 +486,7 @@ figcaption {
   font-size: 42px;
   font-family: FontAwesome;
   content: '\f10e';
-  color: #263959;
+  color: #131414;
 }
 
 @media (max-width: 820px) {
@@ -534,7 +538,7 @@ figcaption {
   font-size: 42px;
   font-family: FontAwesome;
   content: '\f10e';
-  color: #263959;
+  color: #131414;
 }
 
 @media (max-width: 820px) {
@@ -593,7 +597,7 @@ figcaption {
   font-size: 42px;
   font-family: FontAwesome;
   content: '\f10e';
-  color: #263959;
+  color: #131414;
 }
 
 @media (max-width: 820px) {
@@ -763,7 +767,7 @@ span.online::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #263959;
+  background: #131414;
   height: 80px;
   padding: 0 20px;
 }
@@ -1147,7 +1151,7 @@ ul .navbar-mobile-item:last-child {
     position: absolute;
     z-index: 10;
     padding: 10px 10px 10px;
-    background: #263959;
+    background: #131414;
     width: 100%;
     left: 0;
     top: 60px;
@@ -1418,7 +1422,7 @@ header > a.logo {
   position: absolute;
   width: 160px;
   z-index: 2;
-  background-color: #263959;
+  background-color: #131414;
   box-shadow: 2px 2px 1px rgba(136, 136, 136, 0.09);
   color: white;
 }
@@ -1443,7 +1447,7 @@ header > a.logo {
 }
 
 .mentionsList::before {
-  border-bottom: solid 8px #263959;
+  border-bottom: solid 8px #131414;
   border-left: solid 8px transparent;
   border-right: solid 8px transparent;
   content: '';
@@ -1749,7 +1753,7 @@ button {
 
 .btn-blue {
   color: white;
-  background: #263959;
+  background: #131414;
 }
 
 .btn-blue:hover:not(:disabled):not(.btn-disabled) {
@@ -1758,13 +1762,13 @@ button {
 }
 
 .btn-blue-outlined {
-  color: #263959;
-  box-shadow: inset 0px 0px 0px 1.6px #263959;
+  color: #131414;
+  box-shadow: inset 0px 0px 0px 1.6px #131414;
 }
 
 .btn-blue-outlined:hover {
   color: white;
-  background: #263959;
+  background: #131414;
 }
 
 .btn-brown {
@@ -2420,14 +2424,14 @@ a.close {
   position: absolute;
   right: 10px;
   top: 10px;
-  color: #263959;
+  color: #131414;
   font-size: 22px;
   opacity: 0.7;
 }
 
 a.close:hover {
   opacity: 1;
-  color: #263959;
+  color: #131414;
 }
 
 body {

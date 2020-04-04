@@ -1,21 +1,21 @@
 <template>
   <div v-if="asyncDataStatus_ready" class="col-large push-top">
-    <h1>
+    <h1 class="text-white">
       {{thread.title}}
       <router-link
+        class="text-white"
+        v-if="authUser._id === thread.author._id"
         :to="{name: 'ThreadEdit', slug: this.slug}"
-        class="btn-green btn-small"
-        tag="button"
-      >Edit Thread</router-link>
+      >
+        <i class="fa fa-pencil"></i>
+      </router-link>
     </h1>
-    <p>
+
+    <p class="text-white">{{thread.text}}</p>
+    <p class="text-white">
       By
       <a href="#" class="link-unstyled">{{thread.author.username}}</a>,
       <AppDate :timestamp="thread.publishedAt" />.
-      <span
-        style="float:right; margin-top: 2px;"
-        class="hide-mobile text-faded text-small"
-      >{{repliesCount}} replies by {{contributorsCount}} contributors</span>
     </p>
     <PostList v-if="posts" :posts="posts" :threadId="thread._id" />
     <PostEditor v-if="authUser" :threadId="thread._id" :threadSlug="thread.slug" />

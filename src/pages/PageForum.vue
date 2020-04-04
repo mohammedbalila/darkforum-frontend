@@ -3,10 +3,10 @@
     <div class="col-full push-top" v-if="forum">
       <div class="forum-header">
         <div class="forum-details">
-          <h1>{{forum.name}}</h1>
-          <p class="text-lead">{{forum.description}}</p>
-          <AppDate :timestamp="forum.publishedAt" />.
-          <p>by {{forum.author.username}}.</p>
+          <h1 class="text-white">{{forum.name}}</h1>
+          <p class="text-lead text-white">{{forum.description}}</p>
+          <AppDate class="text-white" :timestamp="forum.publishedAt" />.
+          <p class="text-white">by {{forum.author.username}}.</p>
         </div>
         <router-link
           :to="{name: 'ThreadCreate', params: {

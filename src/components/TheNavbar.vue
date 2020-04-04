@@ -6,7 +6,7 @@
     v-handle-scroll="closeMobileNavbar"
   >
     <router-link :to="{ name: 'Home' }" class="logo">
-      <img src="../assets/img/vueschool-logo.svg" />
+      <img style="border-radius: 50%;" src="../assets/img/cover.png" />
     </router-link>
 
     <div class="btn-hamburger" @click="mobileNavOpen = !mobileNavOpen">
@@ -28,7 +28,11 @@
             />
             <span>
               {{ user.username }}
-              <img class="icon-profile" src="../assets/img/arrow-profile.svg" alt />
+              <img
+                class="icon-profile"
+                src="../assets/img/arrow-profile.svg"
+                alt
+              />
             </span>
           </a>
 
@@ -38,9 +42,9 @@
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
               <li class="dropdown-menu-item">
-                <router-link :to="{ name: 'Profile', params: { username: user.username } }"
-                  >View Profile</router-link
-                >
+                <router-link
+                  :to="{ name: 'Profile', params: { username: user.username } }"
+                >View Profile</router-link>
               </li>
               <li class="dropdown-menu-item">
                 <a @click.prevent="$store.dispatch('auth/signOut')">Sign Out</a>
@@ -49,9 +53,11 @@
           </div>
         </li>
         <li class="navbar-mobile-item">
-          <router-link :to="{ name: 'Profile', params: { username: user.username } }"
-            >View Profile</router-link
-          >
+          <router-link
+            :to="{ name: 'Profile', params: {
+            username: user.username
+            } }"
+          >View Profile</router-link>
         </li>
         <li class="navbar-mobile-item">
           <a @click.prevent="$store.dispatch('auth/signOut')">Sign Out</a>

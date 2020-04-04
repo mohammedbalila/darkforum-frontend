@@ -50,4 +50,9 @@ export default {
 </script>
 
 <style scoped>
+.forum-list {
+  background-image: url('../assets/img/bats.jpg');
+  background-position: center;
+  background-size: cover;
+}
 </style>

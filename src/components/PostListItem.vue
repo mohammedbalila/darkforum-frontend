@@ -14,7 +14,7 @@
 
     <div class="post-content">
       <template v-if="!editing">
-        <div>{{post.text}}</div>
+        <div>{{text}}</div>
         <a
           v-if="authUser && authUser._id === post.author._id"
           @click.prevent="editing = true"
@@ -27,12 +27,7 @@
         </a>
       </template>
       <div v-else>
-        <PostEditor
-          :post="post"
-          :threadId="threadId"
-          @save="editing = false"
-          @cancel="editing = false"
-        />
+        <PostEditor :post="post" :threadId="threadId" @save="save" @cancel="editing = false" />
       </div>
     </div>
 
@@ -64,13 +59,21 @@ export default {
 
   data() {
     return {
-      editing: false
+      editing: false,
+      text: this.post.text
     };
   },
 
   computed: {
     authUser() {
       return this.$store.state.auth.currentUser.user;
+    }
+  },
+
+  methods: {
+    save(text) {
+      this.editing = false;
+      this.text = text;
     }
   }
 };

@@ -54,4 +54,9 @@ export default {
 #nprogress .bar {
   background: #57ad8d;
 }
+
+#app {
+  background-image: url('./assets/img/dark-wallpaper.jpg');
+  /* background-; */
+}
 </style>
